@@ -5,7 +5,7 @@ import 'package:info_space_app/core/errors/failure.dart';
 import 'package:info_space_app/core/usecases/usecase.dart';
 
 class GetPeoplesInSpaceUsecase
-    extends UseCase<List<PeopleInSpaceEntity>, NoParams> {
+    implements UseCase<List<PeopleInSpaceEntity>, NoParams> {
   final IPeoplesInSpaceRepository peoplesInSpaceRepository;
 
   GetPeoplesInSpaceUsecase({required this.peoplesInSpaceRepository});
