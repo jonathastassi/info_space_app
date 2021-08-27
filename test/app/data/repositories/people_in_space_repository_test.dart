@@ -50,7 +50,7 @@ void main() {
       });
 
       test(
-          'Should return a list of persons in space from API and save the result at local',
+          'Should return a list of peoples in space from remote datasource and save the result at local',
           () async {
         when(() => peopleInSpaceRemoteDatasource.getPeoplesInSpace())
             .thenAnswer((_) async => mockPeoplesModels);
@@ -83,7 +83,7 @@ void main() {
       });
 
       test(
-          'Should return a list of peoples in space from local storage and doesn\'t have to save ',
+          'Should return a list of peoples in space from local datasource and doesn\'t have to save ',
           () async {
         when(() => peopleInSpaceLocalDatasource.getLastPeoplesInSpace())
             .thenAnswer((_) async => mockPeoplesModels);
