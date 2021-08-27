@@ -28,7 +28,7 @@ void main() {
       );
     });
 
-    test('Should get a list of persons in space from the repository', () async {
+    test('Should get a list of peoples in space from the repository', () async {
       when(() => peoplesInSpaceRepository.getPeoplesInSpace()).thenAnswer(
           (_) async => Right<Failure, List<PeopleInSpaceEntity>>(mockPeoples));
 
