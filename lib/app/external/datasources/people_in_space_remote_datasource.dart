@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:info_space_app/app/data/datasources/i_people_in_space_remote_datasource.dart';
 import 'package:info_space_app/app/data/models/people_in_space_model.dart';
+import 'package:info_space_app/app/external/http/i_http_client.dart';
 import 'package:info_space_app/core/errors/expections.dart';
 
 class PeopleInSpaceRemoteDatasource implements IPeopleInSpaceRemoteDatasource {
-  final Dio dio;
+  final IHttpClient httpClient;
 
-  PeopleInSpaceRemoteDatasource({required this.dio});
+  PeopleInSpaceRemoteDatasource({required this.httpClient});
 
   @override
   Future<List<PeopleInSpaceModel>> getPeoplesInSpace() async {
     try {
-      final response = await dio.get('http://api.open-notify.org/astros.json');
+      final response = await httpClient.get('http://api.open-notify.org/astros.json');
 
       final result = json.decode(response.data);
 
