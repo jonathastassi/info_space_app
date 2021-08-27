@@ -15,4 +15,11 @@ class PeopleInSpaceModel extends PeopleInSpaceEntity {
       craft: json['craft'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'craft': craft,
+    };
+  }
 }
