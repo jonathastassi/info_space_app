@@ -6,6 +6,12 @@ class NetworkStatus implements INetworkStatus {
 
   NetworkStatus({required this.connectivity});
 
+  Future<bool> hasConnection() async {
+    final status = await connectivity.checkConnectivity();
+
+    return status.index != ConnectivityResult.none.index;
+  }
+
   @override
-  Future<bool> get isConnected => throw UnimplementedError();
+  Future<bool> get isConnected async => hasConnection();
 }
