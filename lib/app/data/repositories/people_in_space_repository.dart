@@ -8,7 +8,7 @@ import 'package:info_space_app/core/errors/expections.dart';
 import 'package:info_space_app/core/errors/failures.dart';
 import 'package:info_space_app/core/network_status/i_network_status.dart';
 
-class PeopleInSpaceRepository implements IPeoplesInSpaceRepository {
+class PeopleInSpaceRepository implements IPeopleInSpaceRepository {
   IPeopleInSpaceRemoteDatasource peopleInSpaceRemoteDatasource;
   IPeopleInSpaceLocalDatasource peopleInSpaceLocalDatasource;
   INetworkStatus networkStatus;

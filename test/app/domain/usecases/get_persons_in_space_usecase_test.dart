@@ -8,11 +8,11 @@ import 'package:info_space_app/core/usecases/usecase.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockPeoplesInSpaceRepository extends Mock
-    implements IPeoplesInSpaceRepository {}
+    implements IPeopleInSpaceRepository {}
 
 void main() {
   group('Domain - usecases - GetPersonsInSpaceUsecase', () {
-    late IPeoplesInSpaceRepository peoplesInSpaceRepository;
+    late IPeopleInSpaceRepository peoplesInSpaceRepository;
     late GetPeoplesInSpaceUsecase usecase;
 
     final List<PeopleInSpaceEntity> mockPeoples = [

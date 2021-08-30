@@ -25,7 +25,7 @@ void main() {
     late IPeopleInSpaceRemoteDatasource peopleInSpaceRemoteDatasource;
     late IPeopleInSpaceLocalDatasource peopleInSpaceLocalDatasource;
     late INetworkStatus networkStatus;
-    late IPeoplesInSpaceRepository peoplesInSpaceRepository;
+    late IPeopleInSpaceRepository peoplesInSpaceRepository;
 
     final List<PeopleInSpaceModel> mockPeoplesModels = [
       PeopleInSpaceModel(name: "name", craft: "craft"),

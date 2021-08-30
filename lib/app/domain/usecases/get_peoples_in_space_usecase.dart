@@ -6,7 +6,7 @@ import 'package:info_space_app/core/usecases/usecase.dart';
 
 class GetPeoplesInSpaceUsecase
     implements UseCase<List<PeopleInSpaceEntity>, NoParams> {
-  final IPeoplesInSpaceRepository peoplesInSpaceRepository;
+  final IPeopleInSpaceRepository peoplesInSpaceRepository;
 
   GetPeoplesInSpaceUsecase({required this.peoplesInSpaceRepository});
 
