@@ -13,9 +13,10 @@ class PeopleInSpaceRemoteDatasource implements IPeopleInSpaceRemoteDatasource {
   @override
   Future<List<PeopleInSpaceModel>> getPeoplesInSpace() async {
     try {
-      final response = await httpClient.get('http://api.open-notify.org/astros.json');
+      final response =
+          await httpClient.get('http://api.open-notify.org/astros.json');
 
-      final result = json.decode(response.data);
+      final result = response.data;
 
       if (result['message'] == 'success') {
         final listPeoples = result['people'] as List;

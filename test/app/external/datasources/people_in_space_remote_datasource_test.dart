@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:info_space_app/app/external/datasources/people_in_space_remote_datasource.dart';
@@ -22,7 +24,7 @@ void main() {
     });
 
     test('Should return a list of peoples from API', () async {
-      final peoplesInSpaceJson = fixture('peoples_in_space.json');
+      final peoplesInSpaceJson = json.decode(fixture('peoples_in_space.json'));
       when(() => httpClient.get(any())).thenAnswer(
         (_) async => Response(
             requestOptions:
@@ -37,7 +39,8 @@ void main() {
     });
 
     test('Should return empty list', () async {
-      final peoplesInSpaceJson = fixture('peoples_in_space_empty.json');
+      final peoplesInSpaceJson =
+          json.decode(fixture('peoples_in_space_empty.json'));
       when(() => httpClient.get(any())).thenAnswer(
         (_) async => Response(
             requestOptions:
@@ -54,7 +57,8 @@ void main() {
     test(
         'Should return ServerException when API doesn\'t return message success',
         () async {
-      final peoplesInSpaceJson = fixture('peoples_in_space_not_success.json');
+      final peoplesInSpaceJson =
+          json.decode(fixture('peoples_in_space_not_success.json'));
       when(() => httpClient.get(any())).thenAnswer(
         (_) async => Response(
             requestOptions:
