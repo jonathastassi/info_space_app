@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:info_space_app/app/presentation/dependency_injection/dependency_injection_config.dart';
-import 'package:info_space_app/app/presentation/pages/splash/splash_page.dart';
-import 'package:info_space_app/app/presentation/routes/app_routes.dart';
+import 'package:info_space_app/core/dependency_injection/dependency_injection_config.dart';
+import 'package:info_space_app/core/routes/routes_config.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Info Space',
-      initialBinding: DependencyInjectionConfig(),
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      getPages: AppRoutes.routes,
-      initialRoute: SplashPage.route,
+      initialRoute: locator.get<RoutesConfig>().initialRoute,
+      navigatorKey: locator.get<RoutesConfig>().navigatorKey,
+      routes: locator.get<RoutesConfig>().routes,
     );
   }
 }
