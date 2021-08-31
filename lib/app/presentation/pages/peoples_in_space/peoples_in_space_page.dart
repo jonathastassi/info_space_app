@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:info_space_app/app/domain/entities/people_in_space_entity.dart';
 import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_controller.dart';
+import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_state.dart';
 import 'package:info_space_app/app/presentation/widgets/datatable_custom.dart';
+import 'package:info_space_app/core/dependency_injection/dependency_injection_config.dart';
 
-class PeoplesInSpacePage extends GetView<PeoplesInSpaceController> {
+class PeoplesInSpacePage extends StatefulWidget {
   static String route = '/peoples-in-space';
 
-  const PeoplesInSpacePage({Key? key}) : super(key: key);
+  const PeoplesInSpacePage({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _PeoplesInSpacePageState createState() => _PeoplesInSpacePageState();
+}
+
+class _PeoplesInSpacePageState extends State<PeoplesInSpacePage> {
+  final PeoplesInSpaceController peoplesInSpaceController =
+      locator<PeoplesInSpaceController>();
+
+  @override
+  void initState() {
+    peoplesInSpaceController.getPeoplesInSpace();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    peoplesInSpaceController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,20 +67,23 @@ class PeoplesInSpacePage extends GetView<PeoplesInSpaceController> {
               ),
             ),
             Expanded(
-              child: Obx(
-                () => DatatableCustom<PeopleInSpaceEntity>(
-                  data: controller.peopleInSpaceList,
-                  loading: controller.isLoading.value,
-                  onRefresh: controller.getPeoplesInSpace,
-                  itemHeader: [
-                    DataColumn(label: Text('Name')),
-                    DataColumn(label: Text('Craft'))
-                  ],
-                  itemRow: (people) => [
-                    DataCell(Text(people.name)),
-                    DataCell(Text(people.craft), placeholder: true),
-                  ],
-                ),
+              child: ValueListenableBuilder<PeoplesInSpaceState>(
+                builder: (_, state, __) {
+                  return DatatableCustom<PeopleInSpaceEntity>(
+                    data: state.peopleInSpaceList,
+                    loading: state.isLoading,
+                    onRefresh: peoplesInSpaceController.getPeoplesInSpace,
+                    itemHeader: [
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Craft'))
+                    ],
+                    itemRow: (people) => [
+                      DataCell(Text(people.name)),
+                      DataCell(Text(people.craft), placeholder: true),
+                    ],
+                  );
+                },
+                valueListenable: peoplesInSpaceController.state,
               ),
             ),
           ],

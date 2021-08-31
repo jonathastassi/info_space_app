@@ -1,34 +1,28 @@
-import 'package:get/get.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:info_space_app/app/domain/entities/people_in_space_entity.dart';
 import 'package:info_space_app/app/domain/usecases/get_peoples_in_space_usecase.dart';
-import 'package:info_space_app/app/presentation/utils/show_snackbar.dart';
+import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_state.dart';
 import 'package:info_space_app/core/usecases/usecase.dart';
 
-class PeoplesInSpaceController extends GetxController {
-  var peopleInSpaceList = <PeopleInSpaceEntity>[].obs;
-  var isLoading = false.obs;
+class PeoplesInSpaceController {
+  final state = ValueNotifier<PeoplesInSpaceState>(PeoplesInSpaceState());
+  final GetPeoplesInSpaceUsecase getPeoplesInSpaceUsecase;
+
+  PeoplesInSpaceController({required this.getPeoplesInSpaceUsecase});
 
   Future<void> getPeoplesInSpace() async {
-    isLoading.value = true;
-    GetPeoplesInSpaceUsecase controller = Get.find();
+    state.value = PeoplesInSpaceState.loading();
 
-    final result = await controller.call(NoParams());
+    final result = await getPeoplesInSpaceUsecase.call(NoParams());
 
     result.fold((error) {
-      showErrorSnackbar(
-        title: 'Unable to display data!',
-        error: error,
-      );
-      isLoading.value = false;
+      state.value = PeoplesInSpaceState.setFailure(error);
     }, (data) {
-      isLoading.value = false;
-      peopleInSpaceList.value = data;
+      state.value = PeoplesInSpaceState.showList(data);
     });
   }
 
-  @override
-  void onInit() {
-    getPeoplesInSpace();
-    super.onInit();
+  void dispose() {
+    state.dispose();
   }
 }
