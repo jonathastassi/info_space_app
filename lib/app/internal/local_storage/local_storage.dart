@@ -1,15 +1,15 @@
-import 'package:get_storage/get_storage.dart';
 import 'package:info_space_app/app/internal/local_storage/i_local_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage implements ILocalStorage {
-  final GetStorage sharedPreferences;
+  final SharedPreferences sharedPreferences;
 
   LocalStorage({required this.sharedPreferences});
 
   @override
   String? getString(String key) {
     try {
-      return sharedPreferences.read(key);
+      return sharedPreferences.getString(key);
     } catch (e) {
       throw e;
     }
@@ -18,7 +18,7 @@ class LocalStorage implements ILocalStorage {
   @override
   Future<bool> setString(String key, String value) async {
     try {
-      await sharedPreferences.write(key, value);
+      await sharedPreferences.setString(key, value);
       return true;
     } catch (_) {
       return false;
