@@ -1,10 +1,13 @@
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
-class HomeController extends GetxController {
-  var tabIndex = 0;
+class HomeController {
+  final tabIndex = ValueNotifier<int>(0);
 
   void changeTabIndex(int index) {
-    tabIndex = index;
-    update();
+    tabIndex.value = index;
+  }
+
+  void dispose() {
+    tabIndex.dispose();
   }
 }
