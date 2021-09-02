@@ -19,6 +19,7 @@ class PeoplesInSpaceState {
       PeoplesInSpaceState(
         isLoading: false,
         peopleInSpaceList: peopleInSpaceList,
+        failure: null,
       );
 
   factory PeoplesInSpaceState.setFailure(Failure failure) =>

@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:info_space_app/app/domain/entities/people_in_space_entity.dart';
+import 'package:flutter/material.dart';
 import 'package:info_space_app/app/domain/usecases/get_peoples_in_space_usecase.dart';
 import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_state.dart';
 import 'package:info_space_app/core/usecases/usecase.dart';

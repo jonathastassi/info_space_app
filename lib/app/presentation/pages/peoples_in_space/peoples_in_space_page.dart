@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:info_space_app/app/domain/entities/people_in_space_entity.dart';
 import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_controller.dart';
 import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_state.dart';
+import 'package:info_space_app/app/presentation/utils/show_snackbar.dart';
 import 'package:info_space_app/app/presentation/widgets/datatable_custom.dart';
 import 'package:info_space_app/core/dependency_injection/dependency_injection_config.dart';
 
@@ -20,9 +21,20 @@ class _PeoplesInSpacePageState extends State<PeoplesInSpacePage> {
   final PeoplesInSpaceController peoplesInSpaceController =
       locator<PeoplesInSpaceController>();
 
+  Future<void> _getData() async {
+    await peoplesInSpaceController.getPeoplesInSpace();
+
+    if (peoplesInSpaceController.state.value.failure != null) {
+      showErrorSnackbar(
+        title: 'Error',
+        error: peoplesInSpaceController.state.value.failure,
+      );
+    }
+  }
+
   @override
   void initState() {
-    peoplesInSpaceController.getPeoplesInSpace();
+    _getData();
     super.initState();
   }
 
@@ -72,7 +84,7 @@ class _PeoplesInSpacePageState extends State<PeoplesInSpacePage> {
                   return DatatableCustom<PeopleInSpaceEntity>(
                     data: state.peopleInSpaceList,
                     loading: state.isLoading,
-                    onRefresh: peoplesInSpaceController.getPeoplesInSpace,
+                    onRefresh: _getData,
                     itemHeader: [
                       DataColumn(label: Text('Name')),
                       DataColumn(label: Text('Craft'))
