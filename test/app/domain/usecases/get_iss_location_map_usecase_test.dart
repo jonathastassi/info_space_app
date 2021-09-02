@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:info_space_app/app/domain/entities/iss_location_map_entity.dart';
-import 'package:info_space_app/app/domain/entities/posititon_entity.dart';
 import 'package:info_space_app/app/domain/repositories/i_iss_location_map_repository.dart';
 import 'package:info_space_app/app/domain/usecases/get_iss_location_map_usecase.dart';
 import 'package:info_space_app/core/errors/failures.dart';
 import 'package:info_space_app/core/usecases/usecase.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockIssLocationMapRepository extends Mock
@@ -24,10 +24,7 @@ void main() {
 
     test('Should get last position of iss from repository', () async {
       final mockIssLocation = IssLocationMapEntity(
-        position: PositionEntity(
-          latitude: '123',
-          longitude: '567',
-        ),
+        position: LatLng(50, 70),
         timestamp: '1234567',
       );
 

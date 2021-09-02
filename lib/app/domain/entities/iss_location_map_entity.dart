@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:info_space_app/app/domain/entities/posititon_entity.dart';
+import 'package:latlong2/latlong.dart';
 
 class IssLocationMapEntity extends Equatable {
   final String timestamp;
-  final PositionEntity position;
+  final LatLng position;
 
   IssLocationMapEntity({
     required this.timestamp,

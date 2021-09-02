@@ -37,8 +37,8 @@ void main() {
 
       verify(() => httpClient.get(any())).called(1);
       expect(result.timestamp, equals('1630589659'));
-      expect(result.position.latitude, equals('-48.1380'));
-      expect(result.position.longitude, equals('72.4900'));
+      expect(result.position.latitude, equals(-48.1380));
+      expect(result.position.longitude, equals(72.4900));
     });
 
     test(
@@ -49,7 +49,7 @@ void main() {
       when(() => httpClient.get(any())).thenAnswer(
         (_) async => Response(
             requestOptions:
-                RequestOptions(path: 'http://api.open-notify.org/astros.json'),
+                RequestOptions(path: 'http://api.open-notify.org/iss-now.json'),
             data: peoplesInSpaceJson),
       );
 

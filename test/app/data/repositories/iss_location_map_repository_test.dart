@@ -2,12 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:info_space_app/app/data/datasources/i_iss_location_map_remote_datasource.dart';
 import 'package:info_space_app/app/data/models/iss_location_map_model.dart';
-import 'package:info_space_app/app/data/models/position_model.dart';
 import 'package:info_space_app/app/data/repositories/iss_location_map_repository.dart';
 import 'package:info_space_app/app/domain/repositories/i_iss_location_map_repository.dart';
 import 'package:info_space_app/core/errors/expections.dart';
 import 'package:info_space_app/core/errors/failures.dart';
 import 'package:info_space_app/core/network_status/i_network_status.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockIssLocationMapRemoteDatasource extends Mock
@@ -34,10 +34,7 @@ void main() {
         () async {
       final issLocationMock = IssLocationMapModel(
         timestamp: '123456',
-        position: PositionModel(
-          latitude: '123',
-          longitude: '456',
-        ),
+        position: LatLng(85, 70),
       );
 
       when(() => networkStatus.isConnected).thenAnswer((_) async => true);
