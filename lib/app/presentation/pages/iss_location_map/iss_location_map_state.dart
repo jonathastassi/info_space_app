@@ -4,22 +4,26 @@ import 'package:latlong2/latlong.dart';
 
 class IssLocationMapState {
   final IssLocationMapEntity? issLocationMapEntity;
+  final bool isLoading;
   final List<LatLng> markerHistory;
   final Failure? failure;
 
   IssLocationMapState({
+    this.isLoading = false,
     this.issLocationMapEntity,
     this.markerHistory = const [],
     this.failure,
   });
 
   factory IssLocationMapState.initial() => IssLocationMapState(
+        isLoading: true,
         issLocationMapEntity: null,
         failure: null,
       );
 
   factory IssLocationMapState.setFailure(Failure failure) =>
       IssLocationMapState(
+        isLoading: false,
         issLocationMapEntity: null,
         failure: failure,
       );
@@ -29,6 +33,7 @@ class IssLocationMapState {
     List<LatLng> markerHistory,
   ) =>
       IssLocationMapState(
+        isLoading: false,
         issLocationMapEntity: entity,
         failure: null,
         markerHistory: [...markerHistory, entity.position],

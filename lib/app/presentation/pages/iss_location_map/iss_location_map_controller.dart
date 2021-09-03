@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:info_space_app/app/domain/usecases/get_iss_location_map_usecase.dart';
 import 'package:info_space_app/app/presentation/pages/iss_location_map/iss_location_map_state.dart';
 import 'package:info_space_app/app/presentation/utils/show_snackbar.dart';
+import 'package:info_space_app/core/errors/failures.dart';
 import 'package:info_space_app/core/usecases/usecase.dart';
 
 class IssLocationMapController {
@@ -29,11 +30,6 @@ class IssLocationMapController {
     }, (data) {
       state.value =
           IssLocationMapState.setLocation(data, state.value.markerHistory);
-
-      mapController.move(
-        state.value.issLocationMapEntity!.position,
-        mapController.zoom,
-      );
     });
   }
 
@@ -41,7 +37,15 @@ class IssLocationMapController {
     timer = Timer.periodic(Duration(seconds: 5), (_) async {
       await _getIssLocation();
 
-      if (state.value.failure != null) {
+      if (state.value.issLocationMapEntity != null) {
+        mapController.move(
+          state.value.issLocationMapEntity!.position,
+          mapController.zoom,
+        );
+      }
+
+      if (state.value.failure != null &&
+          state.value.failure != NoConnectionFailure()) {
         showErrorSnackbar(
           title: 'Error',
           error: state.value.failure,
