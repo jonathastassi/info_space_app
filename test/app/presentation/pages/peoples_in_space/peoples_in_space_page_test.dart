@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:info_space_app/app/domain/entities/people_in_space_entity.dart';
-import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_controller.dart';
-import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_page.dart';
-import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_state.dart';
+import 'package:info_space_app/feature/peoples_in_space/presenter/controller/peoples_in_space_controller.dart';
+import 'package:info_space_app/feature/peoples_in_space/presenter/view/peoples_in_space_view.dart';
+import 'package:info_space_app/feature/peoples_in_space/presenter/controller/peoples_in_space_state.dart';
 import 'package:info_space_app/core/errors/failures.dart';
 import 'package:info_space_app/core/routes/routes_config.dart';
 import 'package:mocktail/mocktail.dart';
@@ -51,7 +51,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: PeoplesInSpacePage(),
+          home: PeoplesInSpaceView(),
         ),
       );
 
@@ -71,7 +71,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: PeoplesInSpacePage(),
+          home: PeoplesInSpaceView(),
           navigatorKey: routesConfig.navigatorKey,
         ),
       );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:info_space_app/app/presentation/widgets/datatable_custom.dart';
-import 'package:info_space_app/app/presentation/widgets/loading_widget.dart';
+import 'package:info_space_app/shared/widgets/loading_widget.dart';
 
 void main() {
   group('Presentation - widgets - DatatableCustom', () {

@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:info_space_app/app/presentation/pages/home/home_controller.dart';
 import 'package:info_space_app/app/presentation/pages/home/home_page.dart';
-import 'package:info_space_app/app/presentation/pages/iss_location_map/iss_location_map_controller.dart';
-import 'package:info_space_app/app/presentation/pages/iss_location_map/iss_location_map_page.dart';
-import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_controller.dart';
-import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_page.dart';
-import 'package:info_space_app/app/presentation/pages/peoples_in_space/peoples_in_space_state.dart';
+import 'package:info_space_app/feature/iss_location_map/controller/iss_location_map_controller.dart';
+import 'package:info_space_app/feature/iss_location_map/view/iss_location_map_tab.dart';
+import 'package:info_space_app/feature/peoples_in_space/presenter/controller/peoples_in_space_controller.dart';
+import 'package:info_space_app/feature/peoples_in_space/presenter/view/peoples_in_space_view.dart';
+import 'package:info_space_app/feature/peoples_in_space/presenter/controller/peoples_in_space_state.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockHomeController extends Mock implements HomeController {}
@@ -60,8 +60,8 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.byType(PeoplesInSpacePage), findsOneWidget);
-      expect(find.byType(IssLocationMapPage), findsOneWidget);
+      expect(find.byType(PeoplesInSpaceView), findsOneWidget);
+      expect(find.byType(IssLocationMapView), findsOneWidget);
 
       expect(find.text('Peoples in Space'), findsOneWidget);
       expect(find.text('See ISS location'), findsOneWidget);

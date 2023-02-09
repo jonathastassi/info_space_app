@@ -1,0 +1,4 @@
+enum SplashState {
+  loading,
+  done,
+}
