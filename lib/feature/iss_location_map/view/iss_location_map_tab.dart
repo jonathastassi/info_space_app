@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:info_space_app/feature/iss_location_map/controller/iss_location_map_controller.dart';
 import 'package:info_space_app/feature/iss_location_map/controller/iss_location_map_state.dart';
-import 'package:info_space_app/feature/iss_location_map/provider/iss_location_map_provider.dart';
+import 'package:info_space_app/shared/widgets/error_warning_widget.dart';
 import 'package:info_space_app/shared/widgets/loading_widget.dart';
 import 'package:info_space_app/shared/widgets/sliver_app_bar_custom.dart';
 import 'package:info_space_repository/info_space_repository.dart';
@@ -13,20 +13,24 @@ class IssLocationMapTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IssLocationMapProvider(
-      notifier: IssLocationMapController(
+    return IssLocationMapView(
+      issLocationMapController: IssLocationMapController(
         infoSpaceRepository: InfoSpaceRepository(),
       ),
-      child: const IssLocationMapView(),
     );
   }
 }
 
 class IssLocationMapView extends StatefulWidget {
-  const IssLocationMapView({Key? key}) : super(key: key);
+  const IssLocationMapView({
+    super.key,
+    required IssLocationMapController issLocationMapController,
+  }) : _issLocationMapController = issLocationMapController;
+
+  final IssLocationMapController _issLocationMapController;
 
   @override
-  _IssLocationMapViewState createState() => _IssLocationMapViewState();
+  State<IssLocationMapView> createState() => _IssLocationMapViewState();
 }
 
 class _IssLocationMapViewState extends State<IssLocationMapView>
@@ -34,99 +38,144 @@ class _IssLocationMapViewState extends State<IssLocationMapView>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => IssLocationMapProvider.of(context).initPage());
+      (_) => widget._issLocationMapController.initPage(),
+    );
 
     super.initState();
   }
 
   @override
   void dispose() {
-    IssLocationMapProvider.of(context).dispose();
+    widget._issLocationMapController.dispose();
     super.dispose();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
 
-  //   switch (state) {
-  //     case AppLifecycleState.resumed:
-  //       issLocationMapController.startTimerGetIssLocation();
-  //       break;
-  //     case AppLifecycleState.inactive:
-  //     case AppLifecycleState.paused:
-  //     case AppLifecycleState.detached:
-  //       issLocationMapController.closeTimerGetIssLocation();
-  //       break;
-  //   }
-  // }
+    switch (state) {
+      case AppLifecycleState.resumed:
+        widget._issLocationMapController.startTimerGetIssLocation();
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.detached:
+        widget._issLocationMapController.closeTimerGetIssLocation();
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final issLocationMapController = IssLocationMapProvider.of(context);
+    final issLocationMapController = widget._issLocationMapController;
 
     return ValueListenableBuilder<IssLocationMapState>(
-      builder: (_, state, __) {
+      builder: (_, state, header) {
         return CustomScrollView(
-          physics: BouncingScrollPhysics(
+          physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics(),
           ),
           slivers: [
-            SliverAppBarCustom(
-              context,
-              titlePage: 'info SPACE',
-              titleTab: 'ISS Current Location',
-              descriptionTab:
-                  'The International Space Station is moving at close to 28,000 km/h so its location changes really fast!',
-            ),
+            header ?? const SizedBox.shrink(),
             if (state is LoadingIssLocationMapState)
-              SliverFillRemaining(
+              const SliverFillRemaining(
                 child: LoadingWidget(),
               )
             else if (state is FailureIssLocationMapState)
-              SliverFillRemaining(
+              const SliverFillRemaining(
                 child: LoadingWidget(),
               )
             else
               SliverFillRemaining(
-                child: FlutterMap(
-                  mapController: issLocationMapController.mapController,
-                  options: MapOptions(
-                    screenSize: Size.fromHeight(300),
-                    center: ll.LatLng(51.5, -0.09),
-                    zoom: 3.0,
-                    maxZoom: 10,
-                  ),
+                child: Stack(
                   children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.example.info_space_app',
-                    ),
-                    // if (state.markerHistory.length > 0)
-                    //   PolylineLayer(
-                    //     polylines: [
-                    //       Polyline(
-                    //         points: state.markerHistory,
-                    //         color: Theme.of(context).primaryColor,
-                    //         strokeWidth: 4,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // if (state.issLocationMapEntity != null)
-                    //   MarkerLayer(
-                    //     markers: [
-                    //       Marker(
-                    //         width: 80.0,
-                    //         height: 80.0,
-                    //         point: state.issLocationMapEntity!.position,
-                    //         builder: (ctx) => Container(
-                    //           child: Image.asset(
-                    //               'assets/images/satellite_icon.png'),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
+                    if (state is FailureIssLocationMapState)
+                      SliverFillRemaining(
+                        child: ErrorWarningWidget(
+                          onRetry: widget._issLocationMapController.initPage,
+                        ),
+                      )
+                    else
+                      FlutterMap(
+                        mapController: issLocationMapController.mapController,
+                        options: MapOptions(
+                            initialCenter: const ll.LatLng(51.5, -0.09),
+                            initialZoom: state is SuccessIssLocationMapState
+                                ? (state).zoom
+                                : 2.0,
+                            maxZoom: 10,
+                            minZoom: 1),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.info_space_app',
+                          ),
+                          if (state is SuccessIssLocationMapState &&
+                              state.hasMarkerHistory) ...[
+                            PolylineLayer(
+                              polylines: [
+                                Polyline(
+                                  points: state.markerHistory
+                                      .map((data) => ll.LatLng(
+                                          data.latitude, data.longitude))
+                                      .toList(),
+                                  color: Theme.of(context).primaryColor,
+                                  strokeWidth: 4,
+                                ),
+                              ],
+                            ),
+                            MarkerLayer(
+                              markers: [
+                                Marker(
+                                  width: 80.0,
+                                  height: 80.0,
+                                  point: ll.LatLng(
+                                    state.getLastMarker.latitude,
+                                    state.getLastMarker.longitude,
+                                  ),
+                                  child: Image.asset(
+                                      'assets/images/satellite_icon.png'),
+                                ),
+                              ],
+                            ),
+                          ]
+                        ],
+                      ),
+                    if (state is SuccessIssLocationMapState)
+                      Positioned(
+                        right: 10,
+                        top: 10,
+                        child: Column(
+                          children: [
+                            FloatingActionButton(
+                              heroTag: 'zoom_in',
+                              onPressed: state.canAddZoom
+                                  ? () => widget._issLocationMapController
+                                      .setZoom(state.zoom + 1)
+                                  : null,
+                              enableFeedback: state.canAddZoom,
+                              child: const Icon(Icons.zoom_in),
+                            ),
+                            const SizedBox(height: 10),
+                            FloatingActionButton(
+                              heroTag: 'zoom_out',
+                              onPressed: state.canMinusZoom
+                                  ? () => widget._issLocationMapController
+                                      .setZoom(state.zoom - 1)
+                                  : null,
+                              enableFeedback: state.canMinusZoom,
+                              child: const Icon(Icons.zoom_out),
+                            ),
+                            const SizedBox(height: 2),
+                            Chip(
+                              label: Text('${state.zoom}x'),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -134,6 +183,13 @@ class _IssLocationMapViewState extends State<IssLocationMapView>
         );
       },
       valueListenable: issLocationMapController,
+      child: SliverAppBarCustom(
+        context,
+        titlePage: 'info SPACE',
+        titleTab: 'ISS Current Location',
+        descriptionTab:
+            'The International Space Station is moving at close to 28,000 km/h so its location changes really fast!',
+      ),
     );
   }
 }

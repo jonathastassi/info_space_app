@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ErrorWarningWidget extends StatelessWidget {
   const ErrorWarningWidget({
-    Key? key,
+    super.key,
     this.title = 'Error!',
     required this.onRetry,
-  }) : super(key: key);
+  });
 
   final String title;
   final VoidCallback onRetry;
@@ -16,20 +16,20 @@ class ErrorWarningWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
+        const Icon(
           Icons.error_outline,
           size: 50,
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Text(title),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         TextButton(
           onPressed: onRetry,
-          child: Text('Retry'),
+          child: const Text('Retry'),
         )
       ],
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:info_space_app/feature/peoples_in_space/controller/peoples_in_space_controller.dart';
 import 'package:info_space_app/feature/peoples_in_space/controller/peoples_in_space_state.dart';
-import 'package:info_space_app/feature/peoples_in_space/provider/peoples_in_space_provider.dart';
 import 'package:info_space_app/shared/widgets/error_warning_widget.dart';
 import 'package:info_space_app/shared/widgets/loading_widget.dart';
 import 'package:info_space_app/shared/widgets/sliver_app_bar_custom.dart';
@@ -12,43 +11,50 @@ class PeoplesInSpaceTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PeoplesInSpaceProvider(
-      notifier: PeoplesInSpaceController(
+    return PeoplesInSpaceView(
+      peoplesInSpaceController: PeoplesInSpaceController(
         infoSpaceRepository: InfoSpaceRepository(),
       ),
-      child: const PeoplesInSpaceView(),
     );
   }
 }
 
 class PeoplesInSpaceView extends StatefulWidget {
   const PeoplesInSpaceView({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+    required PeoplesInSpaceController peoplesInSpaceController,
+  }) : _peoplesInSpaceController = peoplesInSpaceController;
+
+  final PeoplesInSpaceController _peoplesInSpaceController;
 
   @override
-  _PeoplesInSpaceViewState createState() => _PeoplesInSpaceViewState();
+  State<PeoplesInSpaceView> createState() => _PeoplesInSpaceViewState();
 }
 
 class _PeoplesInSpaceViewState extends State<PeoplesInSpaceView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => PeoplesInSpaceProvider.of(context).getPeoplesInSpace());
+      (_) => widget._peoplesInSpaceController.getPeoplesInSpace(),
+    );
 
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final peoplesInSpaceController = PeoplesInSpaceProvider.of(context);
+  void dispose() {
+    widget._peoplesInSpaceController.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: PeoplesInSpaceProvider.of(context).getPeoplesInSpace,
+      onRefresh: widget._peoplesInSpaceController.getPeoplesInSpace,
       child: ValueListenableBuilder<PeoplesInSpaceState>(
         builder: (_, state, __) {
           return CustomScrollView(
-            physics: BouncingScrollPhysics(
+            physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics(),
             ),
             slivers: [
@@ -60,20 +66,19 @@ class _PeoplesInSpaceViewState extends State<PeoplesInSpaceView> {
                     'The number of people in space at this moment. List of names when known.',
               ),
               if (state is LoadingPeoplesInSpaceState)
-                SliverFillRemaining(
+                const SliverFillRemaining(
                   child: LoadingWidget(),
                 )
               else if (state is FailurePeoplesInSpaceState)
                 SliverFillRemaining(
                   child: ErrorWarningWidget(
-                    onRetry:
-                        PeoplesInSpaceProvider.of(context).getPeoplesInSpace,
+                    onRetry: widget._peoplesInSpaceController.getPeoplesInSpace,
                   ),
                 )
               else if (state is SuccessPeoplesInSpaceState)
                 SliverToBoxAdapter(
                   child: DataTable(
-                    columns: [
+                    columns: const [
                       DataColumn(label: Text('Name')),
                       DataColumn(label: Text('Craft'))
                     ],
@@ -95,7 +100,7 @@ class _PeoplesInSpaceViewState extends State<PeoplesInSpaceView> {
             ],
           );
         },
-        valueListenable: peoplesInSpaceController,
+        valueListenable: widget._peoplesInSpaceController,
       ),
     );
   }

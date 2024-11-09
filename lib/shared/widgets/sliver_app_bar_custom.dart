@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SliverAppBarCustom extends SliverAppBar {
   SliverAppBarCustom(
-    BuildContext context, {
+    BuildContext context, {super.key, 
     required String titlePage,
     required String titleTab,
     required String descriptionTab,
@@ -27,6 +27,7 @@ class SliverAppBarCustom extends SliverAppBar {
             )
           ],
           bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(130),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -40,14 +41,14 @@ class SliverAppBarCustom extends SliverAppBar {
                       color: Theme.of(context).secondaryHeaderColor,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Text(
                     descriptionTab,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                       color: Colors.white,
@@ -56,7 +57,6 @@ class SliverAppBarCustom extends SliverAppBar {
                 ],
               ),
             ),
-            preferredSize: Size.fromHeight(130),
           ),
         );
 }

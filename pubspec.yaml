@@ -15,7 +15,7 @@ dependencies:
   flutter_map: 7.0.2
   info_space_repository:
     path: packages/info_space_repository
-  latlng: ^0.2.0
+  latlong2: ^0.9.1
 
 dev_dependencies:
   flutter_test:
@@ -25,4 +25,6 @@ dev_dependencies:
 
 
 flutter:
+  assets:
+    - assets/images/
   uses-material-design: true

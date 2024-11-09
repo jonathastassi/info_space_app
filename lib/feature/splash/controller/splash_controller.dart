@@ -6,7 +6,7 @@ class SplashController extends ValueNotifier<SplashState> {
 
   Future<void> init() async {
     value = SplashState.loading;
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     value = SplashState.done;
   }
 }

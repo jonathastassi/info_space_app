@@ -19,7 +19,11 @@ class OpenNotifyApiClient {
       '/iss-now.json',
     );
 
-    final response = await _httpClient.get(request);
+    final response = await _httpClient.get(request).timeout(
+          const Duration(
+            seconds: 10,
+          ),
+        );
 
     if (response.statusCode != 200) {
       throw IssLocationMapRequestFailure();
@@ -34,14 +38,18 @@ class OpenNotifyApiClient {
     return IssLocationMap.fromJson(responseJson);
   }
 
-  @override
   Future<List<PeopleInSpace>> getPeoplesInSpace() async {
     final request = Uri.http(
       _baseUrl,
       '/astros.json',
     );
 
-    final response = await _httpClient.get(request);
+    final response = await _httpClient.get(request).timeout(
+          const Duration(
+            seconds: 10,
+          ),
+        );
+    ;
 
     if (response.statusCode != 200) {
       throw PeoplesInSpaceRequestFailure();

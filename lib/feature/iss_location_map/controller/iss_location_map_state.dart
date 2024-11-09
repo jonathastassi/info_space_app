@@ -9,9 +9,30 @@ abstract class IssLocationMapState {}
 class InitialIssLocationMapState extends IssLocationMapState {}
 
 class SuccessIssLocationMapState extends IssLocationMapState {
-  SuccessIssLocationMapState(this.data);
+  SuccessIssLocationMapState({
+    required this.markerHistory,
+    this.zoom = 2,
+  });
 
-  final List<IssLocationMap> data;
+  final List<LatLng> markerHistory;
+  final double zoom;
+
+  bool get hasMarkerHistory => markerHistory.isNotEmpty;
+
+  LatLng get getLastMarker => markerHistory.last;
+
+  bool get canMinusZoom => zoom > 1;
+  bool get canAddZoom => zoom < 10;
+
+  SuccessIssLocationMapState copyWith({
+    List<LatLng>? markerHistory,
+    double? zoom,
+  }) {
+    return SuccessIssLocationMapState(
+      markerHistory: markerHistory ?? this.markerHistory,
+      zoom: zoom ?? this.zoom,
+    );
+  }
 }
 
 class LoadingIssLocationMapState extends IssLocationMapState {}
@@ -21,41 +42,3 @@ class FailureIssLocationMapState extends IssLocationMapState {
 
   final Exception failure;
 }
-
-// class IssLocationMapState {
-//   // final IssLocationMapEntity? issLocationMapEntity;
-//   final bool isLoading;
-//   final List<LatLng> markerHistory;
-//   // final Failure? failure;
-
-//   IssLocationMapState({
-//     this.isLoading = false,
-//     // this.issLocationMapEntity,
-//     this.markerHistory = const [],
-//     // this.failure,
-//   });
-
-//   factory IssLocationMapState.initial() => IssLocationMapState(
-//         isLoading: true,
-//         // issLocationMapEntity: null,
-//         // failure: null,
-//       );
-
-//   factory IssLocationMapState.setFailure(Failure failure) =>
-//       IssLocationMapState(
-//         isLoading: false,
-//         issLocationMapEntity: null,
-//         failure: failure,
-//       );
-
-//   factory IssLocationMapState.setLocation(
-//     IssLocationMapEntity entity,
-//     List<LatLng> markerHistory,
-//   ) =>
-//       IssLocationMapState(
-//         isLoading: false,
-//         issLocationMapEntity: entity,
-//         failure: null,
-//         markerHistory: [...markerHistory, entity.position],
-//       );
-// }

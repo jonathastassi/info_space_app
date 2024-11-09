@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
-  final String title;
   const LoadingWidget({
-    Key? key,
+    super.key,
     this.title = 'Please, wait!',
-  }) : super(key: key);
+  });
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +14,8 @@ class LoadingWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircularProgressIndicator(),
-        SizedBox(
+        const CircularProgressIndicator(),
+        const SizedBox(
           height: 16,
         ),
         Text(title),

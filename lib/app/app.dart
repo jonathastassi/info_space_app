@@ -10,7 +10,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.light,
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
-      home: SplashPage(),
+      home: const SplashPage(),
     );
   }
 }
